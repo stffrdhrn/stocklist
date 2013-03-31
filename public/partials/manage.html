@@ -1,0 +1,45 @@
+<p>Add and remove your inventory items</p>
+
+<p>Actions: <a href="#/home">Back Home</a> | <b>Add/Remove Items</b> | <a href="#/stocklist/{{stocklist.id}}">Inventory</a></p></p>
+
+<!--
+Add item: <div sl-typeahead source="products" updater="add"></div>
+added {{stockToAdd}}
+-->
+<h2>Add custom Product</h2>
+Category <select ng-model="category" 
+        ng-options="code as cat.tooltip for (code,cat) in categories" >
+</select>
+Product <input type="text" ng-model="name" ></input>
+<button ng-click="addNew(category,name)"><i class="icon-plus"></i>Add</button>
+
+<h2>Add Product not in Inventory</h2>
+<table class="table table-striped" >
+  <tr>
+    <th class="category">Cat.</th>
+    <th>Product</th>
+    <th class="remove">Add</th>
+  </tr>
+
+  <tr ng-repeat="product in products" >
+    <td><sl-category name="product.category" ></td>
+    <td>{{product.name}} </td>   
+    <td><button ng-click="add(stock)"><i class="icon-plus"></i></button> </td> 
+  </tr>
+</table>
+
+<h2>Products in Inventory</h2>
+<table class="table table-striped" >
+  <tr>
+    <th class="category">Cat.</th>
+    <th>Product</th>
+    <th class="remove">Remove</th>
+  </tr>
+
+  <tr ng-repeat="stock in stocklist.product_stocks" >
+    <td><sl-category name="stock.product.category" ></td>
+    <td>{{stock.product.name}} </td>   
+    <td><button ng-click="remove(stock)"><i class="icon-remove"></i></button> </td> 
+  </tr>
+</table>
+

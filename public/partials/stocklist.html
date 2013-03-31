@@ -1,0 +1,32 @@
+<p>Your Inventory</p>
+
+<p>Actions: <a href="#/home">Back Home</a> |
+<a href="#/stocklist/{{stocklist.id}}/manage">Add/Remove Items</a> | <b>Inventory</b></p>
+<p><i class="icon-search"></i>View Options: <input type="checkbox" ng-model="outOfStockOnly"> Out of stock items only</p>
+
+<table class="table table-striped" >
+  <tr>
+    <th class="category">Cat.</th>
+    <th class="status">Stock?</th>
+    <th>Item</th>
+  </tr>
+
+<!-- Tango Icons
+
+  FOOD - Food Stuff      Tomato, Style_Mushroom
+  KGDS - Kitchen Goods   Application tirretto
+  LGDS - Living Goods    icon_nature
+  BGDS - Bathroom Goods
+ -->
+
+  <tr ng-repeat="stock in stocklist.product_stocks | filter:filterInStock " ng-class="{error: !stockStatus[stock.id] && !outOfStockOnly}" >
+    <td><sl-category name="stock.product.category" ></td>
+    <td><input type="checkbox" 
+               ng-click="updateStock(stock)" 
+               ng-model="stockStatus[stock.id]"> </td>
+    <td>{{stock.product.name}} <span 
+               class="pull-right label label-important" 
+               ng-show="!stockStatus[stock.id] && !outOfStockOnly">Out of Stock</span></td>   
+  </tr>
+</table>
+

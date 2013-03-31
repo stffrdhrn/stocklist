@@ -1,0 +1,41 @@
+// Place all the styles related to the stocklist controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+th.category {
+  width: 8%;
+}
+
+th.status, th.remove {
+  width: 8%;
+}
+
+[class^="slicon-"], [class*=" slicon-"] {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    margin-top: 1px;
+    line-height: 16px;
+    vertical-align: text-top;
+    background-repeat: no-repeat;
+}
+
+.slicon-food {
+  background-image: url('icon-cherries.png');
+}
+
+.slicon-kitchen {
+  background-image: url('icon-coffee.png');
+}
+
+.slicon-living {
+  background-image: url('icon-tree.png');
+}
+
+.slicon-bath {
+  background-image: url('icon-flower.png');
+}
+
+.slicon-cleaning {
+  background-image: url('icon-shirts.png');
+}
