@@ -24,7 +24,7 @@ Product <input type="text" ng-model="name" ></input>
   <tr ng-repeat="product in products" >
     <td><sl-category name="product.category" ></td>
     <td>{{product.name}} </td>   
-    <td><button ng-click="add(stock)"><i class="icon-plus"></i></button> </td> 
+    <td><button ng-click="add(product)"><i class="icon-plus"></i></button> </td> 
   </tr>
 </table>
 
@@ -39,7 +39,7 @@ Product <input type="text" ng-model="name" ></input>
   <tr ng-repeat="stock in stocklist.product_stocks" >
     <td><sl-category name="stock.product.category" ></td>
     <td>{{stock.product.name}} </td>   
-    <td><button ng-click="remove(stock)"><i class="icon-remove"></i></button> </td> 
+    <td><button ng-click="remove(stock.product)"><i class="icon-remove"></i></button> </td> 
   </tr>
 </table>
 

@@ -4,6 +4,9 @@ Stocklist::Application.routes.draw do
 
   get 'stocklist' => 'stocklist#index'
   get 'stocklist/:id' => 'stocklist#show'
+  post 'stocklist/:id/add' => 'stocklist#add'
+  post 'stocklist/:id/remove' => 'stocklist#remove'
+
   post 'product_stock/:id/quantity' => 'product_stock#quantity'
 
   # The priority is based upon order of creation:

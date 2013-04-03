@@ -12,4 +12,17 @@ class ProductsController < ApplicationController
     end
   end
 
+  def create
+    @product = Product.new
+    @product.category = params[:category]
+    @product.name = params[:name]
+    @product.product_type = 'USER'
+
+    if @product.save
+      render :json => @product
+    else 
+      render :json => {:error => "Failed to save product" }
+    end
+  end
+
 end

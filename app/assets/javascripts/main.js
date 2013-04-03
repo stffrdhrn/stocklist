@@ -34,7 +34,7 @@ function StocklistCtrl($scope, $routeParams, $location, Stocklist, stocklistServ
     }
 }
 
-function ManageCtrl($scope, $routeParams, Stocklist, Product, slCategoryMap) {
+function ManageCtrl($scope, $routeParams, Stocklist, Product, slCategoryMap, stocklistService) {
 
     var stocklist = Stocklist.get({stocklistId: $routeParams.stocklistId});
     var products = Product.query({excludingStocklist: $routeParams.stocklistId});
@@ -48,16 +48,16 @@ function ManageCtrl($scope, $routeParams, Stocklist, Product, slCategoryMap) {
         product.name = name;
         product.category = category;
         product.$save(function(u, response) {
-                      
+          products.push(product);              
         });
     };
 
-    $scope.remove = function(stock) {
-
+    $scope.remove = function(product) {
+        stocklistService.removeProduct(stocklist,product);        
     };
 
-    $scope.add = function(stock) {
-
+    $scope.add = function(product) {
+        stocklistService.addProduct(stocklist,product); 
     };
 
 }
@@ -83,11 +83,28 @@ stocklist.factory('Stocklist', function($resource) {
 }).service('stocklistService', function($http) {
 
     this.updateStock = function(stock,quantity) {
-        $http.post('/product_stock/'+stock.id+'/quantity', {quantity: quantity}).
-            success(function() {
+        $http.post('/product_stock/'+stock.id+'/quantity', 
+           { quantity: quantity }).success(function() {
                 stock.quantity = quantity;                
         });
-    }
+    };
+
+    this.addProduct = function(stocklist,product) {
+        $http.post('/stocklist/'+stocklist.id+'/add', 
+           { product_id: product.id }).success(function() {
+              stocklist.$get();
+        });
+    };
+
+    this.removeProduct = function(stocklist,product) {
+        $http.post('/stocklist/'+stocklist.id+'/remove', 
+           { product_id: product.id }).success(function() {
+              stocklist.$get();
+        });
+    };
+
+
+
 }).factory('Product', function($resource) {
     return $resource('/products/:productId', 
                     { productId: '@id', format: 'json' } );
