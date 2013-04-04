@@ -43,22 +43,35 @@ function ManageCtrl($scope, $routeParams, Stocklist, Product, slCategoryMap, sto
     $scope.stocklist = stocklist;
     $scope.products = products;
 
+    $scope.remove = function(product) {
+        stocklistService.removeProduct(stocklist,product,function() {
+            products.push(product);      
+        });        
+    };
+
+    $scope.add = function(product) {
+        stocklistService.addProduct(stocklist,product, function() {
+            var deleteIndex = -1;
+            angular.forEach(products, function(value,key) {
+                if(value.id === product.id) {
+                    deleteIndex = key;
+                }   
+            });
+            if (deleteIndex != -1) {
+                products.splice(deleteIndex,1);
+            }
+        }); 
+    };
+
     $scope.addNew = function(category, name) {
         var product = new Product();
         product.name = name;
         product.category = category;
         product.$save(function(u, response) {
-          products.push(product);              
+            $scope.add(product);        
         });
     };
 
-    $scope.remove = function(product) {
-        stocklistService.removeProduct(stocklist,product);        
-    };
-
-    $scope.add = function(product) {
-        stocklistService.addProduct(stocklist,product); 
-    };
 
 }
 
@@ -89,17 +102,31 @@ stocklist.factory('Stocklist', function($resource) {
         });
     };
 
-    this.addProduct = function(stocklist,product) {
+    this.addProduct = function(stocklist,product,success) {
         $http.post('/stocklist/'+stocklist.id+'/add', 
            { product_id: product.id }).success(function() {
-              stocklist.$get();
+              stocklist.product_stocks.push({ product: product});
+              if (success) {
+                  success();
+              }
         });
     };
 
-    this.removeProduct = function(stocklist,product) {
+    this.removeProduct = function(stocklist,product,success) {
         $http.post('/stocklist/'+stocklist.id+'/remove', 
            { product_id: product.id }).success(function() {
-              stocklist.$get();
+              var deleteIndex = -1;
+              angular.forEach(stocklist.product_stocks, function(value, key){
+                  if(value.product.id === product.id) {
+                      deleteIndex = key;
+                  }
+              });
+              if (deleteIndex != -1) {
+                  stocklist.product_stocks.splice(deleteIndex, 1);
+              }
+              if (success) {
+                  success();
+              }
         });
     };
 
