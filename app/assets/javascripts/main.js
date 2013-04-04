@@ -43,6 +43,21 @@ function ManageCtrl($scope, $routeParams, Stocklist, Product, slCategoryMap, sto
     $scope.stocklist = stocklist;
     $scope.products = products;
 
+    $scope.removeProduct = function(product) {
+        product.$delete(function() {
+            var deleteIndex = -1;
+            angular.forEach(products, function(value,key) {
+                if(value.id === product.id) {
+                    deleteIndex = key;
+                }   
+            });
+            if (deleteIndex != -1) {
+                products.splice(deleteIndex,1);
+            }
+      
+        });
+    };
+
     $scope.remove = function(product) {
         stocklistService.removeProduct(stocklist,product,function() {
             products.push(product);      

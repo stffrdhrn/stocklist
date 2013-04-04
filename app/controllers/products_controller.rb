@@ -7,9 +7,7 @@ class ProductsController < ApplicationController
     end
 
     @products = Product.where('id not in (?)', stocklist.products.map(&:id))
-    respond_to do |format|
-      format.json { render :json => @products.to_json }
-    end
+    render :json => @products
   end
 
   def create
@@ -22,6 +20,16 @@ class ProductsController < ApplicationController
       render :json => @product
     else 
       render :json => {:error => "Failed to save product" }
+    end
+  end
+
+  def destroy
+    @product = Product.find(params[:id]) 
+    if @product.product_type == 'USER'
+      @product.destroy
+      render :json => {:status => :ok}, :status => :ok
+    else 
+      render :json => {:error => "Failed to save product" }, :status => :forbidden
     end
   end
 

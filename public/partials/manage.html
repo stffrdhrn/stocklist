@@ -6,27 +6,39 @@
 Add item: <div sl-typeahead source="products" updater="add"></div>
 added {{stockToAdd}}
 -->
-<h2>Add custom Product</h2>
+<h2>Add a Custom Product</h2>
 Category <select ng-model="category" 
-        ng-options="code as cat.tooltip for (code,cat) in categories" >
+        ng-options="code as cat.tooltip for (code,cat) in categories" required>
+        <option value="">Choose Category</option>
 </select>
 Product <input type="text" ng-model="name" ></input>
 <button ng-click="addNew(category,name)"><i class="icon-plus"></i>Add</button>
 
+<div ng-show="products.length > 0">
 <h2>Add Product not in Inventory</h2>
 <table class="table table-striped" >
   <tr>
     <th class="category">Cat.</th>
     <th>Product</th>
+    <th class="remove">Delete</th>
     <th class="remove">Add</th>
   </tr>
 
   <tr ng-repeat="product in products" >
     <td><sl-category name="product.category" ></td>
     <td>{{product.name}} </td>   
-    <td><button ng-click="add(product)"><i class="icon-plus"></i></button> </td> 
+    <td>
+      <button class="btn btn-danger" 
+              ng-show="product.product_type=='USER'" 
+              ng-click="removeProduct(product)"><i class="icon-remove"></i>
+      </button> 
+    </td>
+    <td>
+      <button ng-click="add(product)"><i class="icon-plus"></i></button> 
+    </td> 
   </tr>
 </table>
+</div>
 
 <h2>Products in Inventory</h2>
 <table class="table table-striped" >
