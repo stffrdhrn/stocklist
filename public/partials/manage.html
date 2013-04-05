@@ -6,41 +6,47 @@
 Add item: <div sl-typeahead source="products" updater="add"></div>
 added {{stockToAdd}}
 -->
-<h2>Add a Custom Product</h2>
-Category <select ng-model="category" 
-        ng-options="code as cat.tooltip for (code,cat) in categories" required>
-        <option value="">Choose Category</option>
-</select>
-Product <input type="text" ng-model="name" ></input>
-<button ng-click="addNew(category,name)"><i class="icon-plus"></i>Add</button>
+<h3>Create New</h3>
+<form name="createNew" class="form-inline">
+  <select ng-model="category" 
+          ng-options="code as cat.tooltip for (code,cat) in categories"
+          required>
+          <option value="">Category</option>
+  </select>
+  <input type="text" 
+         ng-model="name" 
+         placeholder="Name" 
+         required></input>
+  <button ng-disabled="createNew.$invalid" ng-click="addNew(category,name)"><i class="icon-plus"></i>Add</button>
+</form>
 
-<div ng-show="products.length > 0">
-<h2>Add Product not in Inventory</h2>
-<table class="table table-striped" >
-  <tr>
-    <th class="category">Cat.</th>
-    <th>Product</th>
-    <th class="remove">Delete</th>
-    <th class="remove">Add</th>
-  </tr>
+<div ng-show="false">
+  <h3>Add available Product</h3>
+  <table class="table table-striped" >
+    <tr>
+      <th class="category">Cat.</th>
+      <th>Product</th>
+      <th class="remove">Delete</th>
+      <th class="remove">Add</th>
+    </tr>
 
-  <tr ng-repeat="product in products" >
-    <td><sl-category name="product.category" ></td>
-    <td>{{product.name}} </td>   
-    <td>
+    <tr ng-repeat="product in products" >
+      <td><sl-category name="product.category" ></td>
+      <td>{{product.name}} </td>   
+      <td>
       <button class="btn btn-danger" 
               ng-show="product.product_type=='USER'" 
               ng-click="removeProduct(product)"><i class="icon-remove"></i>
       </button> 
-    </td>
-    <td>
-      <button ng-click="add(product)"><i class="icon-plus"></i></button> 
-    </td> 
-  </tr>
-</table>
+      </td>
+      <td>
+        <button ng-click="add(product)"><i class="icon-plus"></i></button> 
+      </td> 
+    </tr>
+  </table>
 </div>
 
-<h2>Products in Inventory</h2>
+<h3>Products in Inventory</h3>
 <table class="table table-striped" >
   <tr>
     <th class="category">Cat.</th>
@@ -54,4 +60,3 @@ Product <input type="text" ng-model="name" ></input>
     <td><button ng-click="remove(stock.product)"><i class="icon-remove"></i></button> </td> 
   </tr>
 </table>
-

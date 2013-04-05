@@ -6,8 +6,12 @@ class ProductsController < ApplicationController
       stocklist = Stock.find(params[:excludingStocklist])
     end
 
-    @products = Product.where('id not in (?)', stocklist.products.map(&:id))
-    render :json => @products
+    # If you give this query an empty list it returns nothing, add dummy calue to return something
+    ids = stocklist.products.map(&:id)
+    ids.push(-99)
+
+    @products = Product.where('id not in (?)', ids)
+    render :json => @products, :status => :ok
   end
 
   def create

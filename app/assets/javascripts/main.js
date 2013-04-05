@@ -78,12 +78,16 @@ function ManageCtrl($scope, $routeParams, Stocklist, Product, slCategoryMap, sto
         }); 
     };
 
+    $scope.category = '';
+    $scope.name = '';
+
     $scope.addNew = function(category, name) {
         var product = new Product();
         product.name = name;
         product.category = category;
         product.$save(function(u, response) {
-            $scope.add(product);        
+            $scope.add(product);
+            $scope.name = ''; 
         });
     };
 
