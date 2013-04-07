@@ -28,7 +28,7 @@ class ProductsController < ApplicationController
 
   def destroy
     @product = Product.find(params[:id]) 
-    if @product.product_type == 'USER'
+    if @product.ownership == Product::USER
       @product.destroy
       render :json => {:status => :ok}, :status => :ok
     else 

@@ -7,7 +7,30 @@
   <%= javascript_include_tag "application" %>
   <%= csrf_meta_tags %>
 </head>
-<body>
+<body ng-app="stocklist">
+<div ng-controller="NavCtrl" class="navbar">
+  <div class="navbar-inner">
+    <a class="brand" href="#">Stocklist</a>
+    <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </a>
+    <div class="nav-collapse collapse">
+      <ul class="nav">
+        <li ng-class="{active: havePath('/home')}"><a href="#/home">Home</a></li>
+        <li ng-class="{active: havePath('/stocklist')}" class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">My Stocklists<b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li ng-repeat="stocklist in stocklists">
+              <a href="#/stocklist/{{stocklist.id}}">{{stocklist.name}}</a>
+            </li>
+          </ul>
+       </li>
+      </ul>
+    </div>
+  </div>
+</div>
 <div class="container-fluid">
   <div class="row-fluid">
     <div class="span12">

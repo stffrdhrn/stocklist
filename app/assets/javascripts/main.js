@@ -1,5 +1,12 @@
 /* NG App : Stocklist */
 
+function NavCtrl($scope, $location, Stocklist) {
+    $scope.stocklists = Stocklist.query(); 
+    $scope.havePath = function(pattern) {
+      return $location.path().indexOf(pattern) >= 0;
+    };
+}
+
 function HomeCtrl($scope, $resource, Stocklist) {
     $scope.stocklists = Stocklist.query();
 }
@@ -42,8 +49,10 @@ function ManageCtrl($scope, $routeParams, Stocklist, Product, slCategoryMap, sto
     $scope.categories = slCategoryMap;
     $scope.stocklist = stocklist;
     $scope.products = products;
+    $scope.flash = '';
 
     $scope.removeProduct = function(product) {
+        $scope.flash = "Permanently deleting " + product.name;
         product.$delete(function() {
             angular.forEach(products, function(value,i) {
                 if(value.id === product.id) {
@@ -56,16 +65,18 @@ function ManageCtrl($scope, $routeParams, Stocklist, Product, slCategoryMap, sto
 
     $scope.remove = function(product) {
         stocklistService.removeProduct(stocklist,product,function() {
+            $scope.flash = "Removed " + product.name + " from " + stocklist.name;
             products.push(product);      
         });        
     };
 
     $scope.add = function(product) {
         stocklistService.addProduct(stocklist,product, function() {
+            $scope.flash = "Added " + product.name + " to " + stocklist.name;
             angular.forEach(products, function(value,i) {
                 if(value.id === product.id) {
                     products.splice(i,1);
-                }   
+                }
             });
         }); 
     };
@@ -180,6 +191,36 @@ stocklist.factory('Stocklist', function($resource) {
                 updater: function(item) {
                     scope.updater(item);
                     scope.$apply();
+                }
+            });
+        }
+    };
+}).directive('slFlash', function($timeout) {
+
+    return {
+        replace: true,
+        restrict: 'EA',
+        scope: { notice: '=notice' },
+        template: '<div class="alert fade in">{{notice}}<a class="close" href>&times;</a></div>',
+        link: function(scope, element, attrs) {
+            var fadeTime = 750;
+
+            $(element).hide();
+            $(element).find('a').click(function() { $(element).fadeOut(fadeTime); });
+
+            var timer = null;
+            scope.$watch('notice', function() {
+                if (scope.notice !== '') {
+                    if (timer) {
+                        $timeout.cancel(timer);
+                    }
+                    $(element).show();
+
+                    timer = $timeout(function(){
+                        timer = null;
+                        $(element).fadeOut(fadeTime);
+                        scope.$apply();
+                    },3000);
                 }
             });
         }

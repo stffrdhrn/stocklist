@@ -1,7 +1,12 @@
-<p>Add and remove your inventory items</p>
+<ul class="breadcrumb">
+  <li><a href="#/home">Home</a> <span class="divider">/</span></li>
+  <li><a href="#/stocklist/{{stocklist.id}}">{{stocklist.name}} Inventory</a><span class="divider">/</span></li>
+  <li class="active">Manage {{stocklist.name}}</li>
+</ul>
 
-<p>Actions: <a href="#/home">Back Home</a> | <b>Add/Remove Items</b> | <a href="#/stocklist/{{stocklist.id}}">Inventory</a></p></p>
+<sl-flash notice="flash" ></sl-flash>
 
+<p>Add and remove your {{stocklist.name}} inventory items</p>
 <!--
 Add item: <div sl-typeahead source="products" updater="add"></div>
 added {{stockToAdd}}
@@ -11,7 +16,7 @@ added {{stockToAdd}}
   <select ng-model="category" 
           ng-options="code as cat.tooltip for (code,cat) in categories"
           required>
-          <option value="">Select Category ...</option>
+          <option value="">Select Category</option>
   </select>
   <input type="text" 
          ng-model="name" 
@@ -35,7 +40,7 @@ added {{stockToAdd}}
       <td>{{product.name}} </td>   
       <td>
       <button class="btn btn-danger" 
-              ng-show="product.product_type=='USER'" 
+              ng-show="product.ownership=='USER'" 
               ng-click="removeProduct(product)"><i class="icon-remove"></i>
       </button> 
       </td>
@@ -54,7 +59,7 @@ added {{stockToAdd}}
     <th class="remove">Remove</th>
   </tr>
 
-  <tr ng-repeat="stock in stocklist.product_stocks" >
+  <tr ng-repeat="stock in stocklist.product_stocks">
     <td><sl-category name="stock.product.category" ></td>
     <td>{{stock.product.name}} </td>   
     <td><button ng-click="remove(stock.product)"><i class="icon-remove"></i></button> </td> 

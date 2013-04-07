@@ -1,8 +1,15 @@
-<p>Your Inventory</p>
+<ul class="breadcrumb">
+  <li><a href="#/home">Home</a> <span class="divider">/</span></li>
+  <li class="active">{{stocklist.name}} Inventory</li>
+</ul>
 
-<p>Actions: <a href="#/home">Back Home</a> |
-<a href="#/stocklist/{{stocklist.id}}/manage">Add/Remove Items</a> | <b>Inventory</b></p>
-<p><i class="icon-search"></i>View Options: <input type="checkbox" ng-model="outOfStockOnly"> Out of stock items only</p>
+<p>Your {{stocklist.name}} Inventory</p>
+
+<ul class="inline">
+<li ng-show="!outOfStockOnly"><i class="icon-search"></i><a href ng-click="outOfStockOnly=true"> Show out of stock items only</a>
+<li ng-show="outOfStockOnly"><i class="icon-search"></i><a href ng-click="outOfStockOnly=false"> Show all items</a>
+<li><i class="icon-edit"></i><a href="#/stocklist/{{stocklist.id}}/manage"> Add/Remove {{stocklist.name}} Items</a>
+</ul>
 
 <table class="table table-striped" >
   <tr>
