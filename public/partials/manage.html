@@ -11,7 +11,7 @@ added {{stockToAdd}}
   <select ng-model="category" 
           ng-options="code as cat.tooltip for (code,cat) in categories"
           required>
-          <option value="">Category</option>
+          <option value="">Select Category ...</option>
   </select>
   <input type="text" 
          ng-model="name" 
@@ -20,7 +20,7 @@ added {{stockToAdd}}
   <button ng-disabled="createNew.$invalid" ng-click="addNew(category,name)"><i class="icon-plus"></i>Add</button>
 </form>
 
-<div ng-show="false">
+<div ng-show="products.length > 0">
   <h3>Add available Product</h3>
   <table class="table table-striped" >
     <tr>

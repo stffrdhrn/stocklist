@@ -2,15 +2,14 @@ class ProductsController < ApplicationController
 
   def index 
 
-    if params[:excludingStocklist] 
-      stocklist = Stock.find(params[:excludingStocklist])
+    @products = nil
+    if params[:excluding] 
+      stocklist = Stock.find(params[:excluding])
+      @products = Product.all_excluding_stocklist(stocklist)
+    else 
+      @products = Product.all
     end
 
-    # If you give this query an empty list it returns nothing, add dummy calue to return something
-    ids = stocklist.products.map(&:id)
-    ids.push(-99)
-
-    @products = Product.where('id not in (?)', ids)
     render :json => @products, :status => :ok
   end
 
@@ -18,7 +17,7 @@ class ProductsController < ApplicationController
     @product = Product.new
     @product.category = params[:category]
     @product.name = params[:name]
-    @product.product_type = 'USER'
+    @product.ownership = Product::USER
 
     if @product.save
       render :json => @product
@@ -33,7 +32,7 @@ class ProductsController < ApplicationController
       @product.destroy
       render :json => {:status => :ok}, :status => :ok
     else 
-      render :json => {:error => "Failed to save product" }, :status => :forbidden
+      render :json => {:error => "Failed to delete product" }, :status => :forbidden
     end
   end
 

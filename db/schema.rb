@@ -11,35 +11,35 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130325135135) do
+ActiveRecord::Schema.define(:version => 20130407090227) do
 
   create_table "product_stocks", :force => true do |t|
-    t.integer  "quantity"
+    t.integer  "quantity",   :default => 1, :null => false
     t.integer  "stock_id"
     t.integer  "product_id"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",                :null => false
+    t.datetime "updated_at",                :null => false
   end
 
   create_table "products", :force => true do |t|
-    t.string   "category"
-    t.string   "name"
-    t.string   "product_type", :limit => 4
-    t.datetime "created_at",                :null => false
-    t.datetime "updated_at",                :null => false
+    t.string   "category",   :limit => 4,  :null => false
+    t.string   "name",       :limit => 64, :null => false
+    t.string   "ownership",  :limit => 4,  :null => false
+    t.datetime "created_at",               :null => false
+    t.datetime "updated_at",               :null => false
     t.integer  "user_id"
     t.integer  "stock_id"
   end
 
   create_table "stocks", :force => true do |t|
-    t.string   "name"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-    t.integer  "user_id"
+    t.string   "name",       :limit => 64, :null => false
+    t.datetime "created_at",               :null => false
+    t.datetime "updated_at",               :null => false
+    t.string   "user_id",                  :null => false
   end
 
   create_table "users", :force => true do |t|
-    t.string   "name",       :limit => 12
+    t.string   "name",       :limit => 64, :null => false
     t.datetime "created_at",               :null => false
     t.datetime "updated_at",               :null => false
   end

@@ -5,10 +5,7 @@ class ProductStockController < ApplicationController
     productStock.quantity = params[:quantity]
     productStock.save
 
-    respond_to do |format|
-      format.json { head :ok }
-    end
-
+    render :json => {:status => :ok}, :status => :ok
   end
 
 end

@@ -2,9 +2,7 @@ class StocklistController < ApplicationController
 
   def index 
     @stocklist = Stock.all
-    respond_to do |format|
-      format.json { render :json => @stocklist.to_json }
-    end
+    render :json => @stocklist
   end
 
   def show
@@ -12,10 +10,7 @@ class StocklistController < ApplicationController
     @stocklist.product_stocks.each do |sl|
       sl.quantity = !sl.quantity ? 0 : sl.quantity
     end
-    respond_to do |format|
-      format.json { render :json => @stocklist.to_json( :include =>  
-            { :product_stocks => { :include => :product } } ) }
-    end
+    render :json => @stocklist.to_json( :include =>  { :product_stocks => { :include => :product } } )
   end
 
   def add
