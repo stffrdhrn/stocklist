@@ -18,4 +18,4 @@ Product.create({:category => Product::CLEANING_GOODS, :name => 'Laundry Detergen
 Product.create({:category => Product::BATHROOM_GOODS, :name => 'Toilet Paper', :ownership => Product::DEFAULT})
 Product.create({:category => Product::BATHROOM_GOODS, :name => 'Shampoo', :ownership => Product::DEFAULT})
 Product.create({:category => Product::BATHROOM_GOODS, :name => 'Toothpaste', :ownership => Product::DEFAULT})
-User.init('Stafford Horne')
+User.init('Stafford Horne', 'shorne@gmail.com', 'password', 'password')

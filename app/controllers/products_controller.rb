@@ -18,6 +18,7 @@ class ProductsController < ApplicationController
     @product.category = params[:category]
     @product.name = params[:name]
     @product.ownership = Product::USER
+    @product.user = current_user
 
     if @product.save
       render :json => @product

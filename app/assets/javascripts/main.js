@@ -1,14 +1,42 @@
 /* NG App : Stocklist */
 
-function NavCtrl($scope, $location, Stocklist) {
+function NavCtrl($scope, $location, $rootScope, sessionsService, Stocklist) {
+
     $scope.stocklists = Stocklist.query(); 
-    $scope.havePath = function(pattern) {
-      return $location.path().indexOf(pattern) >= 0;
+
+    $scope.logout = function() {
+        sessionsService.logout();
     };
+
+    $scope.havePath = function(pattern) {
+        return $location.path().indexOf(pattern) >= 0;
+    };
+
+    $scope.$watch(function() { return $location.path(); }, function(newValue, oldValue){  
+        if ($rootScope.currentUser == null && newValue != '/login'){  
+            $location.path('/login');  
+        }   
+    });
 }
 
 function HomeCtrl($scope, $resource, Stocklist) {
     $scope.stocklists = Stocklist.query();
+}
+
+function LoginCtrl($scope,$rootScope,$location,sessionsService) {
+    $scope.status = '';
+
+    if ($rootScope.currentUser != null) {
+        $location.path('/home');
+    }
+
+    $scope.login = function(email,password) {
+        sessionsService.login(email,password, function(user) {
+          $scope.status = "Logged In " + user.name;
+        }, function() {
+          $scope.status = "Login Failed";
+        });
+    }
 }
 
 function StocklistCtrl($scope, $routeParams, $location, Stocklist, stocklistService) {
@@ -93,8 +121,6 @@ function ManageCtrl($scope, $routeParams, Stocklist, Product, slCategoryMap, sto
             $scope.name = ''; 
         });
     };
-
-
 }
 
 /* Init Stocklist App */
@@ -102,6 +128,7 @@ var stocklist = angular.module('stocklist',['ngResource']);
 
 stocklist.config(['$routeProvider', function($routeProvider) {
     $routeProvider.
+        when('/login', {templateUrl: 'partials/login.html', controller: LoginCtrl}).
         when('/home', {templateUrl: 'partials/home.html', controller: HomeCtrl}).
         when('/stocklist/:stocklistId', {templateUrl: 'partials/stocklist.html', controller: StocklistCtrl}).
         when('/stocklist/:stocklistId/manage', {templateUrl: 'partials/manage.html', controller: ManageCtrl}).
@@ -148,6 +175,30 @@ stocklist.factory('Stocklist', function($resource) {
         });
     };
 
+}).service('sessionsService', function($http,$rootScope) {
+
+    $http.get('/user').success(function(user){
+        $rootScope.currentUser = user;
+    });
+ 
+    this.login = function(email,password,success,error) {
+        $http.post('/login', { email: email, password: password }).
+            success(function(user) {
+                $rootScope.currentUser = user;
+                if (success) {
+                   success(user);
+                }
+            }).error(error);
+    };
+
+    this.logout = function(success,error) {
+        $http.delete('/logout').success(function() {success
+            $rootScope.currentUser = null;
+            if (success) {
+                success();
+            }
+        }).error(error);
+    };
 
 
 }).factory('Product', function($resource) {

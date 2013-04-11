@@ -5,8 +5,12 @@ An app for managing what you should have stocked in your house.
 * Categorize them by area (kitchen, bathroom, living)
 * Comes pre-stocked with a list of items you should have (TP, milk, eggs)
 * Mark when items are out of stock
-* Android/iPhone app for which access (TODO)
-* Setup notifications to remind you on the way home what to buy (TODO)
+
+== Todo
+* Multi users / Signupp
+* Create new inventory lists
+* Android/iPhone app for mobile access
+* Setup notifications to remind you on the way home what to buy
 
 == Technology
 Built with
