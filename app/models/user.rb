@@ -15,11 +15,11 @@ class User < ActiveRecord::Base
                      :email => email, 
                      :password => password, 
                      :password_confirmation => password_confirmation})
-    s = Stock.create({:name => 'Household'})
-
+    s = Stock.new({:name => 'Household'})
     s.user = u
-
     s.products.push(Product.all)
     s.save
+
+    u
   end
 end

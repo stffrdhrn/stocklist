@@ -23,7 +23,10 @@ function NavCtrl($scope, $location, $rootScope, sessionsService, Stocklist) {
     };
 
     $scope.$watch(function() { return $location.path(); }, function(newValue, oldValue){  
-        if ($rootScope.currentUser == null && newValue != '/home' && newValue != '/login'){  
+        if ($rootScope.currentUser == null && 
+            newValue != '/home' && 
+            newValue != '/signup' && 
+            newValue != '/login'){  
             $location.path('/home');  
         }   
     });
@@ -52,6 +55,22 @@ function LoginCtrl($scope,$rootScope,$location,sessionsService) {
     }
 
     redirect();
+}
+
+function SignupCtrl ($scope, $rootScope, $location, User) {
+    $scope.signup = function(name,email,password,confirm_password) {
+       var user = new User({name: name, 
+                            email: email, 
+                            password: password, 
+                            password_confirmation: confirm_password}); 
+       user.$save(function() {
+           $rootScope.currentUser = user;
+           $scope.status = '';
+           $location.path('/home');
+       }, function() {
+           $scope.status = 'Failed to Sign Up';
+       });
+    };
 }
 
 function StocklistCtrl($scope, $routeParams, $location, Stocklist, stocklistService) {
@@ -144,6 +163,7 @@ var stocklist = angular.module('stocklist',['ngResource']);
 stocklist.config(['$routeProvider', '$httpProvider', function($routeProvider, $httpProvider) {
     $httpProvider.defaults.headers.common['X-CSRF-Token'] = $('meta[name=csrf-token]').attr('content');
     $routeProvider.
+        when('/signup', {templateUrl: 'partials/signup.html', controller: SignupCtrl}).
         when('/login', {templateUrl: 'partials/login.html', controller: LoginCtrl}).
         when('/home', {templateUrl: 'partials/home.html', controller: HomeCtrl}).
         when('/stocklist/:stocklistId', {templateUrl: 'partials/stocklist.html', controller: StocklistCtrl}).
@@ -217,6 +237,9 @@ stocklist.factory('Stocklist', function($resource) {
     };
 
 
+}).factory('User', function($resource) {
+    return $resource('/users/:userId', 
+                    { userId: '@id', format: 'json' } );
 }).factory('Product', function($resource) {
     return $resource('/products/:productId', 
                     { productId: '@id', format: 'json' } );

@@ -10,8 +10,8 @@ class UsersController < ApplicationController
   end
 
   def create
-    @user = User.new()
-    if @user.save
+    @user = User.init(params[:name], params[:email], params[:password], params[:password_confirmation])
+    if !@user.nil?
       sign_in @user
       render :json => @user
     else 

@@ -11,7 +11,7 @@ Stocklist::Application.routes.draw do
   post 'product_stock/:id/quantity' => 'product_stock#quantity'
 
   get 'user' => 'users#get'
-  post 'signup' => 'users#create'
+  post 'users' => 'users#create'
   post 'login' => 'sessions#new'
   delete 'logout' => 'sessions#destroy'
 

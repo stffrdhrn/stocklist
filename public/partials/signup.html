@@ -1,0 +1,34 @@
+<div class="alert" ng-show="status">
+{{status}}
+</div>
+
+<form class="form-horizontal">
+  <legend>Sign Up</legend>
+  <div class="control-group">
+    <label class="control-label" for="name">Name</label>
+    <div class="controls">
+      <input type=text id="name" ng-model="name" >
+    </div>
+  </div>
+  <div class="control-group">
+    <label class="control-label" for="email">Email</label>
+    <div class="controls">
+      <input type=text id="email" ng-model="email" >
+    </div>
+  </div>
+  <div class="control-group">
+    <label class="control-label" for="passwd">Password</label> 
+    <div class="controls">
+      <input type=password id="passwd" ng-model="password" >
+    </div>
+  </div>
+  <div class="control-group">
+    <label class="control-label" for="confpasswd">Confirm Password</label> 
+    <div class="controls">
+      <input type=password id="confpasswd" ng-model="confirm_password" >
+    </div>
+  </div>
+
+
+  <button class="btn btn-primary controls" ng-click="signup(name,email,password,confirm_password)" >Sign Up</button>
+</form>
