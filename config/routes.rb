@@ -17,6 +17,5 @@ Stocklist::Application.routes.draw do
 
   # --- STATIC PAGES ----
   root :to => 'static#index'
-  get  'greeting' => 'static#greeting'
 
 end

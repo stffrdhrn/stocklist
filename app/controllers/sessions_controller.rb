@@ -1,4 +1,5 @@
 class SessionsController < ApplicationController
+  skip_before_filter :check_authorization, :only => [:new]
 
   def new
     @user = User.find_by_email(params[:email])

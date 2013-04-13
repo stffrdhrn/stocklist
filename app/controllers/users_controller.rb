@@ -1,11 +1,11 @@
 class UsersController < ApplicationController
-
+  skip_before_filter :check_authorization
   def get
      @user = current_user
      if @user
          render :json => @user
      else
-         render :json => {:error => "Not logged in"}, :status => :forbidden
+         render :json => {:error => "Not logged in"}, :status => :unauthorized
      end
   end
 

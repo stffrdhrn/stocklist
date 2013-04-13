@@ -1,9 +1,6 @@
 class StaticController < ApplicationController
-  def index
-     
-  end
+  skip_before_filter :check_authorization
 
-  def greeting
-    
-  end 
+  def index
+  end
 end

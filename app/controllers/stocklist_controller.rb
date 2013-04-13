@@ -1,7 +1,7 @@
 class StocklistController < ApplicationController
 
   def index 
-    @stocklist = Stock.all
+    @stocklist = Stock.find_all_by_user_id(current_user.id)
     render :json => @stocklist
   end
 
@@ -35,7 +35,5 @@ class StocklistController < ApplicationController
        format.json { head :ok }
     end
   end
-
-
 
 end

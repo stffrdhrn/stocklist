@@ -2,10 +2,20 @@
 
 function NavCtrl($scope, $location, $rootScope, sessionsService, Stocklist) {
 
-    $scope.stocklists = Stocklist.query(); 
+    $scope.stocklists = [];
+
+    $scope.$watch('currentUser', function(newValue, oldValue) {
+      if (newValue != null) {
+        $scope.stocklists = Stocklist.query(); 
+      } else {
+        $scope.stocklists = [];
+      }
+    });
 
     $scope.logout = function() {
-        sessionsService.logout();
+        sessionsService.logout(function() {
+            $location.path('/home');
+        });
     };
 
     $scope.havePath = function(pattern) {
@@ -13,8 +23,8 @@ function NavCtrl($scope, $location, $rootScope, sessionsService, Stocklist) {
     };
 
     $scope.$watch(function() { return $location.path(); }, function(newValue, oldValue){  
-        if ($rootScope.currentUser == null && newValue != '/login'){  
-            $location.path('/login');  
+        if ($rootScope.currentUser == null && newValue != '/home' && newValue != '/login'){  
+            $location.path('/home');  
         }   
     });
 }
@@ -26,17 +36,22 @@ function HomeCtrl($scope, $resource, Stocklist) {
 function LoginCtrl($scope,$rootScope,$location,sessionsService) {
     $scope.status = '';
 
-    if ($rootScope.currentUser != null) {
-        $location.path('/home');
+    function redirect() { 
+        if ($rootScope.currentUser != null) {
+           $location.path('/home');
+        }
     }
 
     $scope.login = function(email,password) {
         sessionsService.login(email,password, function(user) {
           $scope.status = "Logged In " + user.name;
+          redirect();
         }, function() {
           $scope.status = "Login Failed";
         });
     }
+
+    redirect();
 }
 
 function StocklistCtrl($scope, $routeParams, $location, Stocklist, stocklistService) {
@@ -126,7 +141,8 @@ function ManageCtrl($scope, $routeParams, Stocklist, Product, slCategoryMap, sto
 /* Init Stocklist App */
 var stocklist = angular.module('stocklist',['ngResource']);
 
-stocklist.config(['$routeProvider', function($routeProvider) {
+stocklist.config(['$routeProvider', '$httpProvider', function($routeProvider, $httpProvider) {
+    $httpProvider.defaults.headers.common['X-CSRF-Token'] = $('meta[name=csrf-token]').attr('content');
     $routeProvider.
         when('/login', {templateUrl: 'partials/login.html', controller: LoginCtrl}).
         when('/home', {templateUrl: 'partials/home.html', controller: HomeCtrl}).
