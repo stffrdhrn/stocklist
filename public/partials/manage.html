@@ -56,12 +56,14 @@ added {{stockToAdd}}
   <tr>
     <th class="category">Cat.</th>
     <th>Product</th>
+    <th class="remove">Ownership</th>
     <th class="remove">Remove</th>
   </tr>
 
   <tr ng-repeat="stock in stocklist.product_stocks">
     <td><sl-category name="stock.product.category" ></td>
     <td>{{stock.product.name}} </td>   
+    <td>{{stock.product.ownership}} </td>   
     <td><button ng-click="remove(stock.product)"><i class="icon-remove"></i></button> </td> 
   </tr>
 </table>

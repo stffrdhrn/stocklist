@@ -3,14 +3,17 @@ class UsersController < ApplicationController
   def get
      @user = current_user
      if @user
-         render :json => @user
+         render :json => @user.as_json(:except => [:password_digest])
      else
          render :json => {:error => "Not logged in"}, :status => :unauthorized
      end
   end
 
   def create
-    @user = User.init(params[:name], params[:email], params[:password], params[:password_confirmation])
+    @user = User.init(params[:name], 
+                      params[:email], 
+                      params[:password], 
+                      params[:password_confirmation])
     if !@user.nil?
       sign_in @user
       render :json => @user

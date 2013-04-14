@@ -1,16 +1,23 @@
 /* NG App : Stocklist */
 
-function NavCtrl($scope, $location, $rootScope, sessionsService, Stocklist) {
-
-    $scope.stocklists = [];
-
-    $scope.$watch('currentUser', function(newValue, oldValue) {
+function SetupStocklistWatch(scope,Stocklist) {
+    scope.stocklists = [];
+    scope.$watch('currentUser', function(newValue, oldValue) {
       if (newValue != null) {
-        $scope.stocklists = Stocklist.query(); 
+        scope.stocklists = Stocklist.query(); 
       } else {
-        $scope.stocklists = [];
+        scope.stocklists = [];
       }
     });
+}
+
+function SettingsCtrl($scope) {
+
+}
+
+function NavCtrl($scope, $location, $rootScope, sessionsService, Stocklist) {
+
+    SetupStocklistWatch($scope,Stocklist);
 
     $scope.logout = function() {
         sessionsService.logout(function() {
@@ -22,18 +29,10 @@ function NavCtrl($scope, $location, $rootScope, sessionsService, Stocklist) {
         return $location.path().indexOf(pattern) >= 0;
     };
 
-    $scope.$watch(function() { return $location.path(); }, function(newValue, oldValue){  
-        if ($rootScope.currentUser == null && 
-            newValue != '/home' && 
-            newValue != '/signup' && 
-            newValue != '/login'){  
-            $location.path('/home');  
-        }   
-    });
 }
 
-function HomeCtrl($scope, $resource, Stocklist) {
-    $scope.stocklists = Stocklist.query();
+function HomeCtrl($scope, Stocklist) {
+    SetupStocklistWatch($scope,Stocklist);
 }
 
 function LoginCtrl($scope,$rootScope,$location,sessionsService) {
@@ -73,7 +72,7 @@ function SignupCtrl ($scope, $rootScope, $location, User) {
     };
 }
 
-function StocklistCtrl($scope, $routeParams, $location, Stocklist, stocklistService) {
+function StocklistCtrl($scope,$location, $routeParams, $location, Stocklist, stocklistService) {
     var stockStatus = {};
 
     var stocklist = Stocklist.get({stocklistId: $routeParams.stocklistId}, function() {
@@ -84,6 +83,8 @@ function StocklistCtrl($scope, $routeParams, $location, Stocklist, stocklistServ
             } 
             stockStatus[stock.id] = status;
         });
+    }, function() {
+        $location.path('/home');
     });
 
     $scope.stockStatus = stockStatus;
@@ -163,6 +164,7 @@ var stocklist = angular.module('stocklist',['ngResource']);
 stocklist.config(['$routeProvider', '$httpProvider', function($routeProvider, $httpProvider) {
     $httpProvider.defaults.headers.common['X-CSRF-Token'] = $('meta[name=csrf-token]').attr('content');
     $routeProvider.
+        when('/settings', {templateUrl: 'partials/settings.html', controller: SettingsCtrl}).
         when('/signup', {templateUrl: 'partials/signup.html', controller: SignupCtrl}).
         when('/login', {templateUrl: 'partials/login.html', controller: LoginCtrl}).
         when('/home', {templateUrl: 'partials/home.html', controller: HomeCtrl}).

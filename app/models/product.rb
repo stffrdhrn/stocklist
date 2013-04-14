@@ -16,14 +16,18 @@ class Product < ActiveRecord::Base
 
   belongs_to :user
 
-  def self.all_excluding_stocklist(stocklist)
+  def self.all_excluding_stocklist(user,stocklist)
     # If you give this query an empty list it returns nothing, 
     # add dummy value to return something
 
     ids = stocklist.products.map(&:id)
     ids.push(-99)
 
-    Product.where('id not in (?)', ids)
+    Product.where('(user_id = ? or ownership = ?) and id not in (?)', user.id, DEFAULT, ids)
+  end
+
+  def self.all_for_user(user) 
+    Product.where('user_id = ? or ownership = ?', user.id, DEFAULT)
   end
 
 end

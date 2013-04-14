@@ -5,9 +5,9 @@ class ProductsController < ApplicationController
     @products = nil
     if params[:excluding] 
       stocklist = Stock.find(params[:excluding])
-      @products = Product.all_excluding_stocklist(stocklist)
+      @products = Product.all_excluding_stocklist(current_user, stocklist)
     else 
-      @products = Product.all
+      @products = Product.all_for_user(current_user)
     end
 
     render :json => @products, :status => :ok

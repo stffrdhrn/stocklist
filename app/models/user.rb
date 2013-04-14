@@ -17,7 +17,7 @@ class User < ActiveRecord::Base
                      :password_confirmation => password_confirmation})
     s = Stock.new({:name => 'Household'})
     s.user = u
-    s.products.push(Product.all)
+    s.products.push(Product.all_for_user(u))
     s.save
 
     u
