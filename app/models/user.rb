@@ -22,4 +22,12 @@ class User < ActiveRecord::Base
 
     u
   end
+
+  def gravatar_url
+    ApplicationHelper::avatar_url(email,200)
+  end
+
+  def as_json(options={})
+    super :except => [:password_digest], :methods => [:gravatar_url]
+  end
 end

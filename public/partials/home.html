@@ -13,9 +13,24 @@
   <ul class="breadcrumb">
     <li>Home</li>
   </ul>
-  <ul>
-    <li ng-repeat="stocklist in stocklists">
-      <a href="#/stocklist/{{stocklist.id}}">{{stocklist.name}}</a>
-    </li>
-  </ul>
+  <div class="container">
+  <p>Welcome back, see below for updates and to change your settings</p>
+  <h3>My Profile</h3>
+  <img ng-src="{{currentUser.gravatar_url}}" alt='AVATAR' />
+  <div class="row">
+    <div class="span6">
+      <table class="table">
+        <tr><td>Name</td><td>{{currentUser.name}}</td></tr>
+        <tr><td>E-Mail</td><td>{{currentUser.email}}</td></tr>
+        <tr><td>Member Since</td><td>{{currentUser.created_at}}</td></tr>
+      </table>
+    </div>
+  </div>
+  <h3>My Stocklists</h3>
+  <table class="table">
+    <tr ng-repeat="stocklist in stocklists">
+      <td><a href="#/stocklist/{{stocklist.id}}">{{stocklist.name}}</a>
+    </tr>
+  </table>
+  </div>
 </div>
