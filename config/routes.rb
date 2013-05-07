@@ -5,10 +5,7 @@ Stocklist::Application.routes.draw do
 
   get 'stocklist' => 'stocklist#index'
   get 'stocklist/:id' => 'stocklist#show'
-  post 'stocklist/:id/add' => 'stocklist#add'
-  post 'stocklist/:id/remove' => 'stocklist#remove'
-
-  post 'product_stock/:id/quantity' => 'product_stock#quantity'
+  post 'stocklist/:id' => 'stocklist#save'
 
   get 'user' => 'users#get'
   post 'users' => 'users#create'

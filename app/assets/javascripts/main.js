@@ -93,10 +93,11 @@ function StocklistCtrl($scope,$location, $routeParams, $location, Stocklist, sto
 
     $scope.updateStock = function(stock) {
         if (stockStatus[stock.id]) {
-            stocklistService.updateStock(stock, 1);
+            stock.quantity = 1;
         } else {
-            stocklistService.updateStock(stock, 0);
+            stock.quantity = 0;
         }
+        stocklist.$save();
     };
 
     $scope.filterInStock = function(item) {
@@ -182,35 +183,18 @@ stocklist.factory('Stocklist', function($resource) {
                     { stocklistId: '@id', format: 'json' } );
 }).service('stocklistService', function($http) {
 
-    this.updateStock = function(stock,quantity) {
-        $http.post('/product_stock/'+stock.id+'/quantity', 
-           { quantity: quantity }).success(function() {
-                stock.quantity = quantity;                
-        });
-    };
-
     this.addProduct = function(stocklist,product,success) {
-        $http.post('/stocklist/'+stocklist.id+'/add', 
-           { product_id: product.id }).success(function() {
-              stocklist.product_stocks.push({ product: product});
-              if (success) {
-                  success();
-              }
-        });
+        stocklist.product_stocks.push({ product: product, quantity: 0});
+        stocklist.$save(success);
     };
 
     this.removeProduct = function(stocklist,product,success) {
-        $http.post('/stocklist/'+stocklist.id+'/remove', 
-           { product_id: product.id }).success(function() {
-              angular.forEach(stocklist.product_stocks, function(value, i){
-                  if(value.product.id === product.id) {
-                      stocklist.product_stocks.splice(i, 1);
-                  }
-              });
-              if (success) {
-                  success();
-              }
+        angular.forEach(stocklist.product_stocks, function(value, i) {
+           if (value.product.id === product.id) {
+               stocklist.product_stocks.splice(i, 1);
+           }
         });
+        stocklist.$save(success);
     };
 
 }).service('sessionsService', function($http,$rootScope) {
