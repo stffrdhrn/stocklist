@@ -32,5 +32,13 @@
       <td><a href="#/stocklist/{{stocklist.id}}">{{stocklist.name}}</a>
     </tr>
   </table>
+  <h3>Create New</h3>
+  <form name="createNew" class="form-inline">
+    <input type="text" 
+         ng-model="name" 
+         placeholder="Name" 
+         required></input>
+    <button ng-disabled="createNew.$invalid" ng-click="addNew(name)"><i class="icon-plus"></i>Add</button>
+  </form>
   </div>
 </div>

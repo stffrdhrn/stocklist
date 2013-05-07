@@ -13,6 +13,19 @@ class StocklistController < ApplicationController
     render :json => @stocklist.to_json( :include =>  { :product_stocks => { :include => :product } } )
   end
 
+  def create
+    @stocklist = Stock.new
+    @stocklist.name = params[:name]
+    @stocklist.user = current_user
+
+    if @stocklist.save
+      render :json => @stocklist
+    else 
+      render :json => {:error => "Failed to save product" }
+    end
+
+  end 
+
   def save
     @stocklist = Stock.find(params[:id])
   

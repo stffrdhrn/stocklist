@@ -33,6 +33,14 @@ function NavCtrl($scope, $location, $rootScope, sessionsService, Stocklist) {
 
 function HomeCtrl($scope, Stocklist) {
     SetupStocklistWatch($scope,Stocklist);
+    $scope.addNew = function(name) {
+        var stocklist = new Stocklist();
+        stocklist.name = name;
+        stocklist.$save(function(u, response) {
+            $scope.stocklists.push(stocklist);
+            $scope.name = ''; 
+        });
+    };
 }
 
 function LoginCtrl($scope,$rootScope,$location,sessionsService) {

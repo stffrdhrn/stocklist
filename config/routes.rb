@@ -5,6 +5,7 @@ Stocklist::Application.routes.draw do
 
   get 'stocklist' => 'stocklist#index'
   get 'stocklist/:id' => 'stocklist#show'
+  post 'stocklist' => 'stocklist#create'
   post 'stocklist/:id' => 'stocklist#save'
 
   get 'user' => 'users#get'
